@@ -79,7 +79,11 @@ function html_entry_for(entry) {
 	details = "";
 	for (field in entry) {
 		if (!["lemma", "discriminator", "sypertype", "eng_definition"].includes(field)) {
-			details += "<b>" + field + ":</b> " + entry[field] + "<br />";
+			value = entry[field];
+			if (field == "sememe") {
+				value = "<a href='https://ntsekees.github.io/Predilex/viewer/index.html?id=" + value + "'>" + value + "</a>";
+			}
+			details += "<b>" + field + ":</b> " + value + "<br />";
 		}
 	}
 	ehtml += "<div class='entry-details'>" + details + "</span>"
