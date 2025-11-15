@@ -72,6 +72,20 @@ function validated_by_filter(entry, filter) {
 	return true;
 }
 
+function html_entry_for(entry) {
+	ehtml = "<summary class='entry-head'><b style='color: #002255;'>" + entry["lemma"] + "</b>";
+	ehtml += " <i style='font-size: 75%;'>" + entry["supertype"] + "</i> — ";
+	ehtml += entry["eng_definition"] + "</summary>";
+	details = "";
+	for (field in entry) {
+		if (!["lemma", "discriminator", "sypertype", "eng_definition"].includes(field)) {
+			details += "<b>" + field + ":</b> " + entry[field] + "<br />";
+		}
+	}
+	ehtml += "<div class='entry-details'>" + details + "</span>"
+	return "<details class='entry'>\n" + ehtml + "\n</details>\n";
+}
+
 function run() {
 	var filter = document.getElementById("filter-text").value;
 	var html = "";
@@ -80,14 +94,10 @@ function run() {
 		for (const entry of g_lexicon) {
 			if (filter != "" && !validated_by_filter(entry, filter)) continue;
 			count += 1;
-			ehtml = "<summary><b style='color: #002255;'>" + entry["lemma"] + "</b>";
-			ehtml += " <i style='font-size: 75%;'>" + entry["supertype"] + "</i> — ";
-			ehtml += entry["eng_definition"] + "</summary>";
-			ehtml += "<div class='entry-details'>{Additional datafields will go there}</span>"
-			html += "<details class='entry'>\n" + ehtml + "\n</details>\n";
+			html += html_entry_for(entry);
 		}
 	}
-	html += "<details class='entry'></details>\n";
+	html += "<div class='entry'></div>\n";
 	document.getElementById("result-count").innerHTML = "(" + count + " results)";
 	document.getElementById("results").innerHTML = html;
 }
