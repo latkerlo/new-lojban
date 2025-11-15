@@ -102,6 +102,17 @@ function run() {
 	document.getElementById("results").innerHTML = html;
 }
 
+function get_url_parameters() {
+	return window.location.search.substr(1).split('&').reduce(
+		function (map, item) {
+			var parts = item.split('=');
+			map[parts[0]] = parts[1];
+			return map;
+		},
+		{}
+	);
+}
+
 function setup_2(lexicon) {
 	g_lexicon = lexicon;
 	var s = "";
@@ -116,6 +127,13 @@ function setup_2(lexicon) {
 		if (event.key === 'Enter')
 			run();
 	});
+	params = get_url_parameters();
+	filter = "";
+	for (key in params) {
+		if (key != "")
+			filter += "@" + key + " " + params[key];
+	}
+	filter_text_input.value = filter;
 	run();
 }
 
